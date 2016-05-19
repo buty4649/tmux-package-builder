@@ -1,0 +1,15 @@
+FROM centos:7
+MAINTAINER buty4649@gmail.com
+
+RUN yum -y install --enablerepo=extras epel-release
+RUN yum -y groupinstall "Development Tools"
+RUN yum -y install rpm-build rpmdevtools yum-utils git
+
+RUN rpmdev-setuptree
+RUN echo '%debug_package %{nil}' >> $HOME/.rpmmacros
+WORKDIR /root/rpmbuild/redhat/SPECS
+ADD tmux/tmux.spec /root/rpmbuild/SPECS/tmux.spec
+RUN spectool -g -R /root/rpmbuild/SPECS/tmux.spec
+RUN yum-builddep -y /root/rpmbuild/SPECS/tmux.spec
+
+RUN rpmbuild -ba /root/rpmbuild/SPECS/tmux.spec

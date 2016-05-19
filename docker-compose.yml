@@ -1,0 +1,6 @@
+centos7:
+  dockerfile: Dockerfile.centos7
+  build: .
+  command: find /root/rpmbuild/RPMS/x86_64 -name '*.rpm' -exec cp -v \{\} /tmp \;
+  volumes:
+    - .:/tmp:rw
